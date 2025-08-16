@@ -10,31 +10,28 @@ import FirebaseAuth
 
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated = false
-    @Published var userID: String? = nil
     // イニシャライザメソッドを呼び出して、アプリの起動時に認証状態をチェックする
     init() {
         observeAuthChanges()
     }
-
+    
     private func observeAuthChanges() {
         Auth.auth().addStateDidChangeListener { [weak self] _, user in
             DispatchQueue.main.async {
                 self?.isAuthenticated = user != nil
-                self?.userID = user?.uid
             }
         }
     }
-
+    // ログインするメソッド
     func signIn(email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
-            DispatchQueue.main.async {
-                if let user = result?.user, error == nil {
-                    self?.isAuthenticated = true
-                    self?.userID = user.uid
+            Auth.auth().signIn(withEmail: email, password: password) { [weak self] result, error in
+                DispatchQueue.main.async {
+                    if result != nil, error == nil {
+                        self?.isAuthenticated = true
+                    }
                 }
             }
         }
-    }
     // ログアウトするメソッド
     func signOut() {
             do {
@@ -48,9 +45,8 @@ class AuthViewModel: ObservableObject {
     func signUp(email: String, password: String) {
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
             DispatchQueue.main.async {
-                if let user = result?.user, error == nil {
+                if result != nil, error == nil {
                     self?.isAuthenticated = true
-                    self?.userID = user.uid
                 }
             }
         }

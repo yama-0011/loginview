@@ -21,24 +21,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct SwiftUiFirebaseApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var viewModel = AuthViewModel()
+        @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+        @StateObject var viewModel = AuthViewModel()
 
-    var body: some Scene {
-        WindowGroup {
-            Group {
+        var body: some Scene {
+            WindowGroup {
+                // ログイン状態によって画面遷移するページを変更する
                 if viewModel.isAuthenticated {
                     HelloPage(viewModel: viewModel)
                 } else {
                     SignInView(viewModel: viewModel)
                 }
             }
-            .onAppear {
-                print("起動時 UID:", viewModel.userID ?? "nil")
-            }
-            .onChange(of: viewModel.userID) { newValue in
-                print("UIDが更新されました:", newValue ?? "nil")
-            }
         }
-    }
 }
