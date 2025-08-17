@@ -28,7 +28,8 @@ struct SwiftUiFirebaseApp: App {
             WindowGroup {
                 // ログイン状態によって画面遷移するページを変更する
                 if viewModel.isAuthenticated {
-                    HelloPage(viewModel: viewModel)
+                    FContentView()
+//                    HelloPage(viewModel: viewModel)
                 } else {
                     SignInView(viewModel: viewModel)
                 }
